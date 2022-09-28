@@ -1,0 +1,47 @@
+services:
+  breedbase:
+    restart: always
+    environment:
+      MODE: 'PRODUCTION'
+      PGDATABASE: ${PGDATABASE}
+      PGHOST: ${PGHOST}
+      PGPASSWORD: ${PGPASSWORD}
+      PGUSER: ${PGUSER}
+    volumes:
+      - webdata:/home/production/volume
+      - type: bind
+        source: ./sgn_local.conf
+        target: /home/production/cxgn/sgn/sgn_local.conf 
+      - type: bind
+        source: ./repos/unh-breedbase-img
+        target: /home/production/cxgn/sgn/static/img/unh-breedbase-img
+      - type: bind
+        source: ./repos/unh-breedbase-img/favicon.ico
+        target: /home/production/cxgn/sgn/static/favicon.ico
+      - type: bind
+        source: ./repos/unh-breedbase-mason
+        target: /home/production/cxgn/unh-breedbase-mason
+    ports:
+      - 8080:8080
+      - 25:25
+    image: breedbase/breedbase:latest
+    depends_on:
+      - breedbase_db
+    container_name: breedbase_web
+
+  breedbase_db:
+    restart: always
+    environment:
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    image: postgres:12.7
+    container_name: breedbase_db
+    healthcheck:
+      test: "pg_isready -U postgres -d $${POSTGRES_DB} || exit 1"
+      interval: 10s
+
+volumes:
+  webdata:
+  dbdata:
