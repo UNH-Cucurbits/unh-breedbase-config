@@ -21,10 +21,16 @@ services:
       - type: bind
         source: ./repos/unh-breedbase-mason
         target: /home/production/cxgn/unh-breedbase-mason
+      - type: bind
+        source: ./repos/unh-breedbase-ontology/unh_traits.obo
+        target: /home/production/cxgn/sgn/ontology/unh_traits.obo
+      - type: bind
+        source: ./repos/unh-breedbase-ontology/unh_trait_formula.csv
+        target: /home/production/cxgn/sgn/ontology/unh_trait_formula.csv
     ports:
-      - 8080:8080
+      - 127.0.0.1:8080:8080
       - 25:25
-    image: breedbase/breedbase:latest
+    image: breedbase/breedbase:v0.58
     depends_on:
       - breedbase_db
     container_name: breedbase_web
