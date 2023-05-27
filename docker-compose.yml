@@ -27,10 +27,12 @@ services:
       - type: bind
         source: ./repos/unh-breedbase-ontology/unh_trait_formula.csv
         target: /home/production/cxgn/sgn/ontology/unh_trait_formula.csv
+        source: ./repos/unh-breedbase-corrections
+        target: /home/production/cxgn/sgn/unh-breedbase-corrections
     ports:
       - 127.0.0.1:8080:8080
       - 25:25
-    image: breedbase/breedbase:v0.58
+    image: breedbase/breedbase:v0.73
     depends_on:
       - breedbase_db
     container_name: breedbase_web
